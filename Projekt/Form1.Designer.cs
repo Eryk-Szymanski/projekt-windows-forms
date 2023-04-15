@@ -47,13 +47,16 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.customizeButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.canvasColorButton = new System.Windows.Forms.ToolStripMenuItem();
             this.helpButton = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutButton = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.brushButton = new System.Windows.Forms.ToolStripButton();
             this.pencilButton = new System.Windows.Forms.ToolStripButton();
+            this.sprayButton = new System.Windows.Forms.ToolStripButton();
+            this.rubberButton = new System.Windows.Forms.ToolStripButton();
             this.textBoxerButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
@@ -108,7 +111,7 @@
             this.newFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newFileButton.Name = "newFileButton";
             this.newFileButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newFileButton.Size = new System.Drawing.Size(224, 26);
+            this.newFileButton.Size = new System.Drawing.Size(193, 26);
             this.newFileButton.Text = "&Nowy";
             // 
             // loadButton
@@ -117,14 +120,14 @@
             this.loadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.loadButton.Name = "loadButton";
             this.loadButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.loadButton.Size = new System.Drawing.Size(224, 26);
+            this.loadButton.Size = new System.Drawing.Size(193, 26);
             this.loadButton.Text = "&Otwórz";
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(190, 6);
             // 
             // saveButton
             // 
@@ -132,19 +135,19 @@
             this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveButton.Name = "saveButton";
             this.saveButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveButton.Size = new System.Drawing.Size(224, 26);
+            this.saveButton.Size = new System.Drawing.Size(193, 26);
             this.saveButton.Text = "&Zapisz";
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
             // 
             // exitButton
             // 
             this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(224, 26);
+            this.exitButton.Size = new System.Drawing.Size(193, 26);
             this.exitButton.Text = "Wyjdź";
             // 
             // editButton
@@ -222,16 +225,17 @@
             // toolsButton
             // 
             this.toolsButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.customizeButton});
+            this.canvasColorButton});
             this.toolsButton.Name = "toolsButton";
             this.toolsButton.Size = new System.Drawing.Size(90, 24);
             this.toolsButton.Text = "&Narzędzia";
             // 
-            // customizeButton
+            // canvasColorButton
             // 
-            this.customizeButton.Name = "customizeButton";
-            this.customizeButton.Size = new System.Drawing.Size(166, 26);
-            this.customizeButton.Text = "&Preferencje";
+            this.canvasColorButton.Name = "canvasColorButton";
+            this.canvasColorButton.Size = new System.Drawing.Size(224, 26);
+            this.canvasColorButton.Text = "Tło";
+            this.canvasColorButton.Click += new System.EventHandler(this.selectColor);
             // 
             // helpButton
             // 
@@ -254,7 +258,10 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.brushButton,
             this.pencilButton,
-            this.textBoxerButton});
+            this.sprayButton,
+            this.rubberButton,
+            this.textBoxerButton,
+            this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(30, 567);
@@ -281,6 +288,26 @@
             this.pencilButton.Text = "toolStripButton2";
             this.pencilButton.Click += new System.EventHandler(this.selectTool);
             // 
+            // sprayButton
+            // 
+            this.sprayButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.sprayButton.Image = ((System.Drawing.Image)(resources.GetObject("sprayButton.Image")));
+            this.sprayButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.sprayButton.Name = "sprayButton";
+            this.sprayButton.Size = new System.Drawing.Size(27, 24);
+            this.sprayButton.Text = "toolStripButton1";
+            this.sprayButton.Click += new System.EventHandler(this.selectTool);
+            // 
+            // rubberButton
+            // 
+            this.rubberButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rubberButton.Image = ((System.Drawing.Image)(resources.GetObject("rubberButton.Image")));
+            this.rubberButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rubberButton.Name = "rubberButton";
+            this.rubberButton.Size = new System.Drawing.Size(27, 24);
+            this.rubberButton.Text = "toolStripButton2";
+            this.rubberButton.Click += new System.EventHandler(this.selectTool);
+            // 
             // textBoxerButton
             // 
             this.textBoxerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -290,6 +317,16 @@
             this.textBoxerButton.Size = new System.Drawing.Size(27, 24);
             this.textBoxerButton.Text = "toolStripButton3";
             this.textBoxerButton.Click += new System.EventHandler(this.selectTool);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(27, 24);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.selectColor);
             // 
             // splitContainer1
             // 
@@ -309,7 +346,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.listView1);
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip2);
             this.splitContainer1.Size = new System.Drawing.Size(897, 567);
-            this.splitContainer1.SplitterDistance = 686;
+            this.splitContainer1.SplitterDistance = 685;
             this.splitContainer1.TabIndex = 2;
             // 
             // pictureBox1
@@ -318,7 +355,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(667, 548);
+            this.pictureBox1.Size = new System.Drawing.Size(666, 548);
             this.pictureBox1.TabIndex = 3;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -328,7 +365,7 @@
             // vScrollBar1
             // 
             this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(667, 0);
+            this.vScrollBar1.Location = new System.Drawing.Point(666, 0);
             this.vScrollBar1.Name = "vScrollBar1";
             this.vScrollBar1.Size = new System.Drawing.Size(19, 548);
             this.vScrollBar1.TabIndex = 2;
@@ -338,7 +375,7 @@
             this.hScrollBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.hScrollBar1.Location = new System.Drawing.Point(0, 548);
             this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(686, 19);
+            this.hScrollBar1.Size = new System.Drawing.Size(685, 19);
             this.hScrollBar1.TabIndex = 0;
             // 
             // label1
@@ -370,7 +407,7 @@
             this.toolStripButton13});
             this.toolStrip2.Location = new System.Drawing.Point(0, 540);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(207, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(208, 27);
             this.toolStrip2.TabIndex = 1;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -456,7 +493,7 @@
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem selectAllButton;
         private ToolStripMenuItem toolsButton;
-        private ToolStripMenuItem customizeButton;
+        private ToolStripMenuItem canvasColorButton;
         private ToolStripMenuItem helpButton;
         private ToolStripMenuItem aboutButton;
         private ToolStrip toolStrip1;
@@ -474,5 +511,8 @@
         private ToolStripButton toolStripButton13;
         private PictureBox pictureBox1;
         private ListView listView1;
+        private ToolStripButton sprayButton;
+        private ToolStripButton rubberButton;
+        private ToolStripButton toolStripButton1;
     }
 }

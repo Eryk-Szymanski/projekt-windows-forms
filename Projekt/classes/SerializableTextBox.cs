@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Projekt.classes
+namespace Projekt
 {
     [Serializable]
     public class SerializableTextBox

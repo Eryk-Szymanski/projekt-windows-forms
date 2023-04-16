@@ -8,37 +8,31 @@ using System.Numerics;
 using System.Drawing.Drawing2D;
 using System.Reflection.Emit;
 using static System.Windows.Forms.LinkLabel;
-using Projekt.classes;
+using System.Windows.Forms.Design;
+using System.Diagnostics.Tracing;
 
 namespace Projekt
 {
     public partial class Form1 : Form
     {
-        public delegate void createLineFromSerializableDelegate(SerializableLine line);
-        public delegate void createColorDelegate(SerializableLine line);
-        public delegate void drawLineDelegate(SerializableLine line);
+        public delegate void displayLayerDelegate(Layer layer);
+        public delegate Pen createPenDelegate(tools penType, int newPenSize, Color color);
 
         Graphics graphics;
         int x = -1;
         int y = -1;
         bool moving = false;
         Pen pen;
+        int penSize = 5;
         Color canvasColor = Color.White;
         Color penColor = Color.Black;
-        int penSize = 5;
+        Color rubberColor = Color.White;
         Bitmap brushImage = (Bitmap) Image.FromFile(Directory.GetCurrentDirectory() + "/images/brush.png");
         tools currentTool { get; set; }
         List<Layer> layers { get; set; }
         Layer currentLayer { get; set; }
+        SerializableLine currentLine { get; set; }
 
-        // Narzêdzia z lewego tool boxa
-        public enum tools {
-            brush,
-            pencil,
-            spray,
-            rubber,
-            textBoxer
-        }
         public Form1()
         {
             InitializeComponent();
@@ -56,9 +50,8 @@ namespace Projekt
             graphics = pictureBox1.CreateGraphics();
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             currentTool = tools.pencil;
-            SolidBrush solidBrush = new SolidBrush(penColor);
-            pen = new Pen(penColor, penSize);
-            pen.StartCap = pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+            pen = createPen(currentTool, penSize, penColor);
+            penColorButton.BackColor = penColor;
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -69,6 +62,14 @@ namespace Projekt
                 x = e.X;
                 y = e.Y;
                 pictureBox1.Cursor = Cursors.Cross;
+                currentLine = new SerializableLine();
+                currentLine.lineParts = new List<SerializableLinePart>();
+                currentLine.A = penColor.A;
+                currentLine.R = penColor.R;
+                currentLine.G = penColor.G;
+                currentLine.B = penColor.B;
+                currentLine.Tool = currentTool;
+                currentLine.LineSize = penSize;
             } else
             {
                 SerializableTextBox newTextBoxToSerialize = new SerializableTextBox();
@@ -88,14 +89,10 @@ namespace Projekt
             {
                 if (moving && x != -1 && y != -1)
                 {
-                    SerializableLine line = new SerializableLine();
-                    line.Pt1 = new Point(x, y);
-                    line.Pt2 = e.Location;
-                    line.LineA = penColor.A;
-                    line.LineR = penColor.R;
-                    line.LineG = penColor.G;
-                    line.LineB = penColor.B;
-                    currentLayer.Lines.Add(line);
+                    SerializableLinePart linePart = new SerializableLinePart();
+                    linePart.Pt1 = new Point(x, y);
+                    linePart.Pt2 = e.Location;
+                    currentLine.lineParts.Add(linePart);
                     graphics.DrawLine(pen, new Point(x, y), e.Location);
                     x = e.X;
                     y = e.Y;
@@ -111,35 +108,26 @@ namespace Projekt
                 x = -1;
                 y = -1;
                 pictureBox1.Cursor = Cursors.Default;
+                currentLayer.Lines.Add(currentLine);
             }
         }
 
         private void selectTool(object sender, EventArgs e)
         {
             ToolStripButton button = sender as ToolStripButton;
-            pen.Dispose();
             switch(button.Name)
             {
                 case "brushButton":
                     currentTool = tools.brush;
-                    TextureBrush textureBrush = new TextureBrush(brushImage);
-                    textureBrush.WrapMode = WrapMode.Clamp;
-                    pen = new Pen(textureBrush, penSize);
                     break;
                 case "pencilButton":
                     currentTool = tools.pencil;
-                    SolidBrush solidBrush = new SolidBrush(penColor);
-                    pen = new Pen(solidBrush, penSize);
-                    pen.StartCap = pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
                     break;
                 case "sprayButton":
-                    currentTool = tools.spray;
-                    HatchBrush hatchBrush = new HatchBrush(HatchStyle.Cross, penColor, Color.White);
-                    pen = new Pen(hatchBrush, penSize);
+                    currentTool= tools.spray;
                     break;
                 case "rubberButton":
                     currentTool = tools.rubber;
-                    pen = new Pen(Color.White, penSize);
                     break;
                 case "textBoxerButton":
                     currentTool = tools.textBoxer;
@@ -147,8 +135,39 @@ namespace Projekt
                 default:
                     break;
             }
+            if (currentTool != tools.textBoxer) { 
+                pen = createPen(currentTool, penSize, penColor);
+                penSizeBar.Enabled = true;
+            } else
+            {
+                penSizeBar.Enabled = false;
+            }
         }
 
+        private Pen createPen(tools newPenType, int newPenSize, Color color)
+        {
+            Brush? brush = null;
+            switch (newPenType)
+            {
+                case tools.brush:
+                    brush = new TextureBrush(brushImage);
+                    break;
+                case tools.pencil:
+                    brush = new SolidBrush(color);
+                    break;
+                case tools.spray:
+                    brush = new HatchBrush(HatchStyle.Cross, color, canvasColor);
+                    break;
+                case tools.rubber:
+                    brush = new SolidBrush(rubberColor);
+                    break;
+                default:
+                    break;
+            }
+            Pen newPen = new Pen(brush, newPenSize);
+            newPen.StartCap = newPen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+            return newPen;
+        }
         private void selectColor(object sender, EventArgs e)
         {
             ColorDialog colorDialog = new ColorDialog();
@@ -159,36 +178,9 @@ namespace Projekt
             if (colorDialog.ShowDialog() == DialogResult.OK)
                 try
                 {
-                    if (sender.GetType() == typeof(ToolStripButton))
-                    {
-                        penColor = colorDialog.Color;
-                        pen.Color = penColor;
-                    } else if (sender.GetType() == typeof(ToolStripMenuItem))
-                    {
-                        canvasColor = colorDialog.Color;
-                        pictureBox1.BackColor = canvasColor;
-                        Task t = new Task(() => Console.WriteLine());
-                        TimeSpan ts = TimeSpan.FromMilliseconds(150);
-                        t.Wait(ts);
-                        foreach (Layer layer in layers)
-                        {
-                            foreach (SerializableTextBox textBox in layer.TextBoxes)
-                            {
-                                textBox.BackColor = canvasColor;
-                                TextBox box = pictureBox1.Controls.Find(textBox.Name, true)[0] as TextBox;
-                                box.BackColor = canvasColor;
-                            }
-                            var watek = new Thread(new ThreadStart(() =>
-                            {
-                                foreach (SerializableLine line in layer.Lines)
-                                {
-                                    Invoke(new createLineFromSerializableDelegate(createLineFromSerializable), line);
-                                }
-                            }));
-                            watek.IsBackground = true;
-                            watek.Start();
-                        }
-                    }
+                    penColor = colorDialog.Color;
+                    pen.Color = penColor;
+                    penColorButton.BackColor = penColor;
                 }
                 catch (Exception ex)
                 {
@@ -196,24 +188,13 @@ namespace Projekt
                 }
         }
 
-        private void createLineFromSerializable(SerializableLine line)
-        {
-            var watek = new Thread(new ThreadStart(() =>
-            {
-                Invoke(new createColorDelegate(createColor), line);
-                Invoke(new drawLineDelegate(drawLine), line);
-            }));
-            watek.IsBackground = true;
-            watek.Start();
-            
-        }
-        private void createColor(SerializableLine line)
-        {
-            pen.Color = Color.FromArgb(line.LineA, line.LineR, line.LineG, line.LineB);
-        }
         private void drawLine(SerializableLine line)
         {
-            graphics.DrawLine(pen, line.Pt1, line.Pt2);
+            Pen newPen = (Pen)Invoke(new createPenDelegate(createPen), line.Tool, line.LineSize, Color.FromArgb(line.A, line.R, line.G, line.B));
+            foreach (SerializableLinePart linePart in line.lineParts)
+            {
+                graphics.DrawLine(newPen, linePart.Pt1, linePart.Pt2);
+            }
         }
         private void createTextBoxFromSerializable(SerializableTextBox textBox)
         {
@@ -225,6 +206,17 @@ namespace Projekt
             newTextBox.BackColor = textBox.BackColor;
             newTextBox.BorderStyle = textBox.BorderStyle;
             pictureBox1.Controls.Add(newTextBox);
+        }
+        private void displayLayer(Layer layer)
+        {
+            foreach (SerializableTextBox textBox in layer.TextBoxes)
+            {
+                createTextBoxFromSerializable(textBox);
+            }
+            foreach (SerializableLine line in layer.Lines)
+            {
+                drawLine(line);
+            }
         }
 
         private void loadButton_Click(object sender, EventArgs e)
@@ -246,22 +238,22 @@ namespace Projekt
             try
             {
                 layers = JsonSerializer.Deserialize<List<Layer>>(File.ReadAllText(filePath))!;
-                foreach(Layer layer in layers)
+                var watek = new Thread(new ThreadStart(() => {
+                foreach (Layer layer in layers)
                 {
-                    foreach(SerializableTextBox textBox in layer.TextBoxes)
-                    {
-                        createTextBoxFromSerializable(textBox);
-                    }
-                    var watek = new Thread(new ThreadStart(() =>
-                    {
-                        foreach (SerializableLine line in layer.Lines)
-                        {
-                            Invoke(new createLineFromSerializableDelegate(createLineFromSerializable), line);
-                        }
-                    }));
-                    watek.IsBackground = true;
-                    watek.Start();
+                    Invoke(new displayLayerDelegate(displayLayer), layer);
                 }
+                }));
+                watek.IsBackground = true;
+                watek.Start();
+                penSize = 5;
+                pen = createPen(tools.pencil, penSize, penColor);
+                pen.Color = penColor;
+                currentLayer = new Layer();
+                currentLayer.Name = "Warstwa 1";
+                currentLayer.TextBoxes = new List<SerializableTextBox>();
+                currentLayer.Lines = new List<SerializableLine>();
+                layers.Add(currentLayer);
             }
             catch (Exception ex)
             {
@@ -305,6 +297,13 @@ namespace Projekt
                     MessageBox.Show(ex.Message);
                 }
             }
+        }
+
+        private void penSizeBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar trackBar = sender as TrackBar;
+            penSize = trackBar.Value;
+            pen = createPen(currentTool, penSize, penColor);
         }
     }
 }

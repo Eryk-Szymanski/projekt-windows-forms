@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projekt.classes
+namespace Projekt
 {
     public class Layer
     {

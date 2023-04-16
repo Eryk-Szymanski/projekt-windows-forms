@@ -4,17 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projekt.classes
+namespace Projekt
 {
     [Serializable]
     public class SerializableLine
     {
-        public Point Pt1 { get; set; }
-        public Point Pt2 { get; set; }
-        public int LineA { get; set; }
-        public int LineR { get; set; }
-        public int LineG { get; set; }
-        public int LineB { get; set; }
+        public List<SerializableLinePart> lineParts { get; set; }
+        public int A { get; set; }
+        public int R { get; set; }
+        public int G { get; set; }
+        public int B { get; set; }
+        public tools Tool { get; set; }
+        public int LineSize { get; set; }
+        
         public SerializableLine() { }
     }
 }

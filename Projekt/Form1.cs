@@ -17,7 +17,7 @@ namespace Projekt
     {
         public delegate void displayLayerDelegate(Layer layer);
         public delegate Pen createPenDelegate(tools penType, int newPenSize, Color color);
-
+        
         Graphics graphics;
         int x = -1;
         int y = -1;
@@ -221,23 +221,9 @@ namespace Projekt
 
         private void loadButton_Click(object sender, EventArgs e)
         {
-            var filePath = string.Empty;
-
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Json files (*.json)|*.json";
-                openFileDialog.FilterIndex = 2;
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    filePath = openFileDialog.FileName;
-                }
-            }
-
             try
             {
-                layers = JsonSerializer.Deserialize<List<Layer>>(File.ReadAllText(filePath))!;
+                layers = FileManager.loadFromJson();
                 var watek = new Thread(new ThreadStart(() => {
                 foreach (Layer layer in layers)
                 {
@@ -246,9 +232,6 @@ namespace Projekt
                 }));
                 watek.IsBackground = true;
                 watek.Start();
-                penSize = 5;
-                pen = createPen(tools.pencil, penSize, penColor);
-                pen.Color = penColor;
                 currentLayer = new Layer();
                 currentLayer.Name = "Warstwa 1";
                 currentLayer.TextBoxes = new List<SerializableTextBox>();
@@ -263,40 +246,7 @@ namespace Projekt
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            saveFileDialog.Filter = "Json files (*.json)|*.json";
-            saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
-
-            var filePath = string.Empty;
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                filePath = saveFileDialog.FileName;
-            }
-
-            if (!String.IsNullOrEmpty(filePath))
-            {
-                try
-                {
-                    foreach(Layer layer in layers)
-                    {
-                        foreach(SerializableTextBox textBox in layer.TextBoxes)
-                        {
-                            TextBox box = pictureBox1.Controls.Find(textBox.Name, true)[0] as TextBox;
-                            textBox.Text = box.Text;
-                        }
-                    }
-                    string jsonString = JsonSerializer.Serialize<List<Layer>>(layers);
-
-                    File.WriteAllText(filePath, jsonString);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            FileManager.saveToJson(layers, pictureBox1);
         }
 
         private void penSizeBar_Scroll(object sender, EventArgs e)

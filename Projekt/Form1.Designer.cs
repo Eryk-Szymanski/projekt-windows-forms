@@ -57,7 +57,7 @@
             this.textBoxerButton = new System.Windows.Forms.ToolStripButton();
             this.penColorButton = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.canvasPictureBox = new System.Windows.Forms.PictureBox();
             this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
             this.label1 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -75,7 +75,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.canvasPictureBox)).BeginInit();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.penSizeBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -274,7 +274,7 @@
             this.brushButton.Name = "brushButton";
             this.brushButton.Size = new System.Drawing.Size(28, 24);
             this.brushButton.Text = "toolStripButton1";
-            this.brushButton.Click += new System.EventHandler(this.selectTool);
+            this.brushButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // pencilButton
             // 
@@ -284,7 +284,7 @@
             this.pencilButton.Name = "pencilButton";
             this.pencilButton.Size = new System.Drawing.Size(28, 24);
             this.pencilButton.Text = "toolStripButton2";
-            this.pencilButton.Click += new System.EventHandler(this.selectTool);
+            this.pencilButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // sprayButton
             // 
@@ -294,7 +294,7 @@
             this.sprayButton.Name = "sprayButton";
             this.sprayButton.Size = new System.Drawing.Size(28, 24);
             this.sprayButton.Text = "toolStripButton1";
-            this.sprayButton.Click += new System.EventHandler(this.selectTool);
+            this.sprayButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // rubberButton
             // 
@@ -304,7 +304,7 @@
             this.rubberButton.Name = "rubberButton";
             this.rubberButton.Size = new System.Drawing.Size(28, 24);
             this.rubberButton.Text = "toolStripButton2";
-            this.rubberButton.Click += new System.EventHandler(this.selectTool);
+            this.rubberButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // textBoxerButton
             // 
@@ -314,7 +314,7 @@
             this.textBoxerButton.Name = "textBoxerButton";
             this.textBoxerButton.Size = new System.Drawing.Size(28, 24);
             this.textBoxerButton.Text = "toolStripButton3";
-            this.textBoxerButton.Click += new System.EventHandler(this.selectTool);
+            this.textBoxerButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // penColorButton
             // 
@@ -335,7 +335,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.pictureBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.canvasPictureBox);
             this.splitContainer1.Panel1.Controls.Add(this.vScrollBar1);
             // 
             // splitContainer1.Panel2
@@ -347,18 +347,18 @@
             this.splitContainer1.SplitterDistance = 705;
             this.splitContainer1.TabIndex = 2;
             // 
-            // pictureBox1
+            // canvasPictureBox
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(686, 567);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
+            this.canvasPictureBox.BackColor = System.Drawing.Color.White;
+            this.canvasPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.canvasPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.canvasPictureBox.Name = "canvasPictureBox";
+            this.canvasPictureBox.Size = new System.Drawing.Size(686, 567);
+            this.canvasPictureBox.TabIndex = 3;
+            this.canvasPictureBox.TabStop = false;
+            this.canvasPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.canvasPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.canvasPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // vScrollBar1
             // 
@@ -499,7 +499,7 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.canvasPictureBox)).EndInit();
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.penSizeBar)).EndInit();
@@ -548,7 +548,7 @@
         private ToolStripButton toolStripButton11;
         private ToolStripButton toolStripButton12;
         private ToolStripButton toolStripButton13;
-        private PictureBox pictureBox1;
+        private PictureBox canvasPictureBox;
         private ListView listView1;
         private ToolStripButton sprayButton;
         private ToolStripButton rubberButton;

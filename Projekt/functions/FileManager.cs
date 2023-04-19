@@ -10,9 +10,9 @@ using static Projekt.Form1;
 
 namespace Projekt
 {
-    public static class FileManager
+    public class FileManager
     {
-        public static void saveToJson(List<Layer> layers, PictureBox pictureBox1)
+        public void saveToJson(List<Layer> layers, PictureBox canvasPictureBox)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
 
@@ -35,7 +35,7 @@ namespace Projekt
                     {
                         foreach (SerializableTextBox textBox in layer.TextBoxes)
                         {
-                            TextBox box = pictureBox1.Controls.Find(textBox.Name, true)[0] as TextBox;
+                            TextBox box = canvasPictureBox.Controls.Find(textBox.Name, true)[0] as TextBox;
                             textBox.Text = box.Text;
                         }
                     }
@@ -50,7 +50,7 @@ namespace Projekt
             }
         }
 
-        public static List<Layer> loadFromJson()
+        public List<Layer> loadFromJson()
         {
             var filePath = string.Empty;
 

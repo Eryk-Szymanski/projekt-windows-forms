@@ -14,7 +14,7 @@ namespace Projekt
         public Color penColor = Color.Black;
         Color rubberColor = Color.White;
         Color canvasColor = Color.White;
-        Bitmap brushImage = (Bitmap)Image.FromFile(Directory.GetCurrentDirectory() + "/images/brush.png");
+        Bitmap brushImage = (Bitmap)Image.FromFile(Directory.GetCurrentDirectory() + "/../../../images/brush.png");
         public tools currentTool { get; set; }
         ToolStripButton penColorButton { get; set; }
 

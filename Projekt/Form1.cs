@@ -2,11 +2,7 @@ namespace Projekt
 {
     public partial class Form1 : Form
     {
-        public delegate void displayLayerDelegate(Layer layer);
-        public delegate Pen createPenDelegate(tools penType, int newPenSize, Color color);
-        
         FileManager fileManager { get; }
-        ToolBoxManager toolBoxManager { get; }
         CanvasManager canvasManager { get; }
 
         public Form1()
@@ -14,42 +10,42 @@ namespace Projekt
             InitializeComponent();
 
             fileManager = new FileManager();
-            canvasManager = new CanvasManager(canvasPictureBox);
-            toolBoxManager = new ToolBoxManager(penColorButton);
+            canvasManager = new CanvasManager(canvasPictureBox, penColorButton, layerList);
+            canvasManager.loadLayers();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if(toolBoxManager.currentTool != tools.textBoxer)
-                canvasManager.drawStart(e, toolBoxManager.penColor, toolBoxManager.currentTool, toolBoxManager.penSize);
+            if(canvasManager.toolBoxManager.currentTool != tools.textBoxer)
+                canvasManager.drawStart(e);
             else
                 canvasManager.drawTextBox(e);
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (toolBoxManager.currentTool != tools.textBoxer)
+            if (canvasManager.toolBoxManager.currentTool != tools.textBoxer)
             {
-                canvasManager.draw(e, toolBoxManager.pen);
+                canvasManager.draw(e);
             }
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (toolBoxManager.currentTool != tools.textBoxer)
+            if (canvasManager.toolBoxManager.currentTool != tools.textBoxer)
             {
-                canvasManager.drawEnd(toolBoxManager.currentTool);
+                canvasManager.drawEnd();
             }
         }
 
         private void toolBoxItem_Click(object sender, EventArgs e)
         {
-            toolBoxManager.selectTool(sender as ToolStripButton, penSizeBar);
+            canvasManager.toolBoxManager.selectTool((ToolStripButton)sender, penSizeBar);
         }
 
         private void selectColor(object sender, EventArgs e)
         {
-            toolBoxManager.selectColor();
+            canvasManager.selectColor(sender, layerList);
         }
 
         private void loadButton_Click(object sender, EventArgs e)
@@ -57,7 +53,8 @@ namespace Projekt
             try
             {
                 List<Layer> layers = fileManager.loadFromJson();
-                canvasManager.loadLayers(layers, toolBoxManager.createPen);
+                canvasManager.layers = layers;
+                canvasManager.loadLayers();
             }
             catch (Exception ex)
             {
@@ -72,7 +69,38 @@ namespace Projekt
 
         private void penSizeBar_Scroll(object sender, EventArgs e)
         {
-            toolBoxManager.changePenSize(sender as TrackBar);
+            canvasManager.toolBoxManager.changePenSize((TrackBar)sender);
+        }
+
+        public void selectLayerButton(object sender, EventArgs e)
+        {
+            ToolStripButton clickedButton = (ToolStripButton)sender;
+
+            switch (clickedButton.Name)
+            {
+                case "addLayerBtn":
+                    canvasManager.addLayer();
+                    break;
+                case "removeLayerBtn":
+                    canvasManager.removeLayer();
+                    break;
+                case "duplicateLayerBtn":
+                    canvasManager.duplicateLayer();
+                    break;
+                case "hideLayerBtn":
+                    canvasManager.hideShowLayer();
+                    break;
+            }
+        }
+
+        private void layerList_Click(object sender, EventArgs e)
+        {
+            canvasManager.selectLayer(layerList.SelectedItems[0]);
+        }
+
+        private void aboutButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Ten projekt to wcale nie podróba Painta... (serio)\nAutorzy: Szymañski, Wróblewski, Uzarowicz\nNa potrzeby zaliczenia przedmiotu 'Programowanie Windows Forms'");
         }
     }
 }

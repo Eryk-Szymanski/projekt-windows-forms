@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Projekt
 {
@@ -12,11 +13,11 @@ namespace Projekt
         public Pen pen;
         public int penSize = 5;
         public Color penColor = Color.Black;
-        Color rubberColor = Color.White;
+        public Color rubberColor = Color.White;
         Color canvasColor = Color.White;
         Bitmap brushImage = (Bitmap)Image.FromFile(Directory.GetCurrentDirectory() + "/../../../images/brush.png");
         public tools currentTool { get; set; }
-        ToolStripButton penColorButton { get; set; }
+        public ToolStripButton penColorButton { get; set; }
 
         public ToolBoxManager(ToolStripButton button)
         {
@@ -84,31 +85,18 @@ namespace Projekt
             }
         }
 
-        public void selectColor()
-        {
-            ColorDialog colorDialog = new ColorDialog();
-            colorDialog.AllowFullOpen = false;
-            colorDialog.ShowHelp = true;
-            colorDialog.Color = penColor;
-
-            if (colorDialog.ShowDialog() == DialogResult.OK)
-                try
-                {
-                    penColor = colorDialog.Color;
-                    penColorButton.BackColor = penColor;
-                    if (currentTool == tools.pencil || currentTool == tools.spray)
-                        pen.Color = penColor;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-        }
-
         public void changePenSize(TrackBar trackBar)
         {
             penSize = trackBar.Value;
             pen = createPen(currentTool, penSize, penColor);
+        }
+
+        public void changePenColor(Color color)
+        {
+            penColor = color;
+            penColorButton.BackColor = penColor;
+            if (currentTool == tools.pencil || currentTool == tools.spray)
+                pen.Color = penColor;
         }
     }
 }

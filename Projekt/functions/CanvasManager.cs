@@ -21,21 +21,27 @@ namespace Projekt
         public Layer currentLayer { get; set; }
         SerializableLine currentLine { get; set; }
         public PictureBox canvasPictureBox { get; set; }
+        public ToolBoxManager toolBoxManager { get; }
+        public ListView layerList { get; set; }
 
-        public CanvasManager(PictureBox pictureBox)
+        public CanvasManager(PictureBox pictureBox, ToolStripButton penColorButton, ListView layerList)
         {
             canvasPictureBox = pictureBox;
+            toolBoxManager = new ToolBoxManager(penColorButton);
+            this.layerList = layerList;
 
             layers = new List<Layer>();
             currentLayer = new Layer();
-            currentLayer.Name = "Nowa warstwa";
+            currentLayer.Name = $"Nowa warstwa {layers.Count + 1}";
             currentLayer.TextBoxes = new List<SerializableTextBox>();
             currentLayer.Lines = new List<SerializableLine>();
+            currentLayer.IsVisible = true;
             layers.Add(currentLayer);
 
             canvasPictureBox.BackColor = canvasColor;
             graphics = canvasPictureBox.CreateGraphics();
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            
         }
 
         public void drawTextBox(MouseEventArgs e)
@@ -50,8 +56,11 @@ namespace Projekt
             createTextBoxFromSerializable(newTextBoxToSerialize);
         }
 
-        public void drawStart(MouseEventArgs e, Color penColor, tools currentTool, int penSize)
+        public void drawStart(MouseEventArgs e)
         {
+            Color penColor = toolBoxManager.penColor;
+            tools currentTool = toolBoxManager.currentTool;
+            int penSize = toolBoxManager.penSize;
             moving = true;
             x = e.X;
             y = e.Y;
@@ -66,8 +75,9 @@ namespace Projekt
             currentLine.LineSize = penSize;
         }
 
-        public void draw(MouseEventArgs e, Pen pen)
+        public void draw(MouseEventArgs e)
         {
+            Pen pen = toolBoxManager.pen;
             if (moving && x != -1 && y != -1)
             {
                 SerializableLinePart linePart = new SerializableLinePart();
@@ -80,8 +90,9 @@ namespace Projekt
             }
         }
 
-        public void drawEnd(tools currentTool)
+        public void drawEnd()
         {
+            tools currentTool = toolBoxManager.currentTool;
             if (currentTool != tools.textBoxer)
             {
                 moving = false;
@@ -111,6 +122,15 @@ namespace Projekt
             newTextBox.BorderStyle = textBox.BorderStyle;
             canvasPictureBox.Controls.Add(newTextBox);
         }
+
+        public void addLayerToListView(Layer layer)
+        {
+            var listViewItem = new ListViewItem();
+            listViewItem.Text = $"{layer.Name} - {(layer.IsVisible ? "Widoczna" : "Niewidoczna")}";
+            listViewItem.Name = layer.Name;
+            layerList.Items.Add(listViewItem);
+        }
+
         public void displayLayer(Layer layer, Func<tools, int, Color, Pen> createPen)
         {
             foreach (SerializableTextBox textBox in layer.TextBoxes)
@@ -121,41 +141,74 @@ namespace Projekt
             {
                 drawLine(line, createPen);
             }
+            addLayerToListView(layer);
         }
 
-        public void loadLayers(List<Layer> loadLayers, Func<tools, int, Color, Pen> createPen)
+        public void loadLayers()
         {
-            layers = loadLayers;
             var watek = new Thread(new ThreadStart(() => {
                 foreach (Layer layer in layers)
                 {
-                    canvasPictureBox.Invoke(new displayLayerDelegate(displayLayer), layer, createPen);
+                    if (layer.IsVisible)
+                    {
+                        canvasPictureBox.Invoke(new displayLayerDelegate(displayLayer), layer, toolBoxManager.createPen);
+                    }
                 }
             }));
             watek.IsBackground = true;
             watek.Start();
-            currentLayer = new Layer();
-            currentLayer.Name = "Nowa warstwa";
-            currentLayer.TextBoxes = new List<SerializableTextBox>();
-            currentLayer.Lines = new List<SerializableLine>();
-            layers.Add(currentLayer);
+            currentLayer = layers.Last();
+            highlightSelectedLayer();
         }
 
-        public void selectLayerButton(object sender, EventArgs e)
+        public void selectColor(object sender, ListView layerList)
         {
-            Button clickedButton = (Button)sender;
-
-            switch (clickedButton.Name)
+            ColorDialog colorDialog = new ColorDialog();
+            colorDialog.AllowFullOpen = false;
+            colorDialog.ShowHelp = true;
+            
+            if(sender.GetType() == typeof(ToolStripButton))
             {
-                case "addLayerBtn":
-                    addLayer();
-                    break;
-                case "removeLayerBtn":
-                    removeLayer();
-                    break;
-                case "duplicateLayerBtn":
-                    duplicateLayer();
-                    break;
+                colorDialog.Color = toolBoxManager.penColor;
+            } else
+            {
+                colorDialog.Color = canvasColor;
+            }
+
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+                try
+                {
+                    if (sender.GetType() == typeof(ToolStripButton))
+                    {
+                        toolBoxManager.changePenColor(colorDialog.Color);
+                    }
+                    else
+                    {
+                        canvasColor = colorDialog.Color;
+                        canvasPictureBox.BackColor = canvasColor;
+                        toolBoxManager.rubberColor = canvasColor;
+                        loadLayers();
+                    }
+                   
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+        }
+
+        public void selectLayer(ListViewItem listViewItem)
+        {
+            currentLayer = layers.Where(l => listViewItem.Name.Equals(l.Name)).First();
+        }
+
+        public void highlightSelectedLayer()
+        {
+            string row = $"{currentLayer.Name} - {(currentLayer.IsVisible ? "Widoczna" : "Niewidoczna")}";
+            ListViewItem listViewItem = layerList.FindItemWithText(row);
+            if(listViewItem != null)
+            {
+                listViewItem.BackColor = Color.Aqua;
             }
         }
 
@@ -165,8 +218,10 @@ namespace Projekt
             newLayer.Name = $"Nowa warstwa {layers.Count + 1}";
             newLayer.TextBoxes = new List<SerializableTextBox>();
             newLayer.Lines = new List<SerializableLine>();
+            newLayer.IsVisible = true;
             layers.Add(newLayer);
             currentLayer = newLayer;
+            highlightSelectedLayer();
         }
 
         public void removeLayer() 
@@ -175,6 +230,8 @@ namespace Projekt
             {
                 layers.Remove(currentLayer);
                 currentLayer = layers.Last();
+                highlightSelectedLayer();
+                loadLayers();
             }
             else
             {
@@ -182,27 +239,28 @@ namespace Projekt
             }
         }
 
-        // TODO
         public void duplicateLayer() 
         {
-            /*
-            Layer newLayer = new Layer();
+            
+            Layer newLayer = Helper.CreateDeepCopy<Layer>(currentLayer);
             newLayer.Name = currentLayer.Name + " (kopia)";
-            newLayer.TextBoxes = // tu trzeba przypisac kopie Text boxow
-            newLayer.Lines = // tu trzeba przypisac kopie narysowanych Linii
             layers.Add(newLayer);
             currentLayer = newLayer;
-            */
+            highlightSelectedLayer();
+            loadLayers();
         }
 
-        public void selectLayer(Layer layer) 
+        public void hideShowLayer() 
         {
-            currentLayer = layer;
-        }
-
-        public void hideLayer(Layer layer) 
-        {
-            layer.IsVisible = false;
+            if (currentLayer.IsVisible)
+            {
+                currentLayer.IsVisible = false;
+            }
+            else
+            {
+                currentLayer.IsVisible = true;
+            }
+            loadLayers();
         }
     }
 }

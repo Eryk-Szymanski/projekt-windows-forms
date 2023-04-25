@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projekt
 {
+    [Serializable]
     public class Layer
     {
         public List<SerializableTextBox> TextBoxes { get; set; }

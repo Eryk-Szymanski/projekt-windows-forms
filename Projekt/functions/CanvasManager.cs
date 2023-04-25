@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -133,35 +134,41 @@ namespace Projekt
 
         public void displayLayer(Layer layer, Func<tools, int, Color, Pen> createPen)
         {
-            foreach (SerializableTextBox textBox in layer.TextBoxes)
+            if (layer.IsVisible)
             {
-                createTextBoxFromSerializable(textBox);
-            }
-            foreach (SerializableLine line in layer.Lines)
-            {
-                drawLine(line, createPen);
+                foreach (SerializableTextBox textBox in layer.TextBoxes)
+                {
+                    createTextBoxFromSerializable(textBox);
+                }
+                foreach (SerializableLine line in layer.Lines)
+                {
+                    drawLine(line, createPen);
+                }
             }
             addLayerToListView(layer);
         }
 
         public void loadLayers()
         {
+            graphics.Clear(canvasColor);
+            layerList.Items.Clear();
+            toolBoxManager.rubberColor = canvasColor;
+
             var watek = new Thread(new ThreadStart(() => {
                 foreach (Layer layer in layers)
                 {
-                    if (layer.IsVisible)
-                    {
-                        canvasPictureBox.Invoke(new displayLayerDelegate(displayLayer), layer, toolBoxManager.createPen);
-                    }
+                    canvasPictureBox.Invoke(new displayLayerDelegate(displayLayer), layer, toolBoxManager.createPen);
                 }
             }));
             watek.IsBackground = true;
+            watek.SetApartmentState(ApartmentState.STA);
             watek.Start();
+
             currentLayer = layers.Last();
             highlightSelectedLayer();
         }
 
-        public void selectColor(object sender, ListView layerList)
+        public void selectColor(object sender)
         {
             ColorDialog colorDialog = new ColorDialog();
             colorDialog.AllowFullOpen = false;
@@ -185,8 +192,6 @@ namespace Projekt
                     else
                     {
                         canvasColor = colorDialog.Color;
-                        canvasPictureBox.BackColor = canvasColor;
-                        toolBoxManager.rubberColor = canvasColor;
                         loadLayers();
                     }
                    
@@ -199,13 +204,26 @@ namespace Projekt
 
         public void selectLayer(ListViewItem listViewItem)
         {
+            Layer previousLayer = currentLayer;
             currentLayer = layers.Where(l => listViewItem.Name.Equals(l.Name)).First();
+            highlightSelectedLayer(previousLayer);
         }
 
-        public void highlightSelectedLayer()
+        public void highlightSelectedLayer(Layer previousLayer = null)
         {
-            string row = $"{currentLayer.Name} - {(currentLayer.IsVisible ? "Widoczna" : "Niewidoczna")}";
-            ListViewItem listViewItem = layerList.FindItemWithText(row);
+            string row = String.Empty;
+            ListViewItem listViewItem;
+            if (previousLayer != null)
+            {
+                row = $"{previousLayer.Name} - {(previousLayer.IsVisible ? "Widoczna" : "Niewidoczna")}";
+                listViewItem = layerList.FindItemWithText(row);
+                if(listViewItem != null)
+                {
+                    listViewItem.BackColor = Color.FromArgb(224, 224, 224);
+                }
+            }
+            row = $"{currentLayer.Name} - {(currentLayer.IsVisible ? "Widoczna" : "Niewidoczna")}";
+            listViewItem = layerList.FindItemWithText(row);
             if(listViewItem != null)
             {
                 listViewItem.BackColor = Color.Aqua;
@@ -221,6 +239,7 @@ namespace Projekt
             newLayer.IsVisible = true;
             layers.Add(newLayer);
             currentLayer = newLayer;
+            loadLayers();
             highlightSelectedLayer();
         }
 
@@ -230,8 +249,8 @@ namespace Projekt
             {
                 layers.Remove(currentLayer);
                 currentLayer = layers.Last();
-                highlightSelectedLayer();
                 loadLayers();
+                highlightSelectedLayer();
             }
             else
             {
@@ -246,8 +265,8 @@ namespace Projekt
             newLayer.Name = currentLayer.Name + " (kopia)";
             layers.Add(newLayer);
             currentLayer = newLayer;
-            highlightSelectedLayer();
             loadLayers();
+            highlightSelectedLayer();
         }
 
         public void hideShowLayer() 

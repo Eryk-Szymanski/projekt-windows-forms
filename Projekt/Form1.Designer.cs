@@ -50,16 +50,13 @@
             this.penColorButton = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.canvasPictureBox = new System.Windows.Forms.PictureBox();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.label1 = new System.Windows.Forms.Label();
             this.layerList = new System.Windows.Forms.ListView();
-            this.Nazwa = new System.Windows.Forms.ColumnHeader();
+            this.Warstwy = new System.Windows.Forms.ColumnHeader();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.addLayerBtn = new System.Windows.Forms.ToolStripButton();
             this.removeLayerBtn = new System.Windows.Forms.ToolStripButton();
             this.duplicateLayerBtn = new System.Windows.Forms.ToolStripButton();
             this.hideLayerBtn = new System.Windows.Forms.ToolStripButton();
-            this.penSizeLabel = new System.Windows.Forms.Label();
             this.penSizeBar = new System.Windows.Forms.TrackBar();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.menuStrip1.SuspendLayout();
@@ -79,6 +76,7 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileButton,
@@ -86,7 +84,8 @@
             this.helpButton});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(927, 28);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(0);
+            this.menuStrip1.Size = new System.Drawing.Size(927, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -111,6 +110,7 @@
             this.newFileButton.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.newFileButton.Size = new System.Drawing.Size(193, 26);
             this.newFileButton.Text = "&Nowy";
+            this.newFileButton.Click += new System.EventHandler(this.newFileButton_Click);
             // 
             // loadButton
             // 
@@ -147,6 +147,7 @@
             this.exitButton.Name = "exitButton";
             this.exitButton.Size = new System.Drawing.Size(193, 26);
             this.exitButton.Text = "Wyjdź";
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
             // toolsButton
             // 
@@ -154,7 +155,7 @@
             this.backgroundColorButton});
             this.toolsButton.Name = "toolsButton";
             this.toolsButton.Size = new System.Drawing.Size(90, 24);
-            this.toolsButton.Text = "&Narzędzia";
+            this.toolsButton.Text = "Narzędzia";
             // 
             // backgroundColorButton
             // 
@@ -169,7 +170,7 @@
             this.aboutButton});
             this.helpButton.Name = "helpButton";
             this.helpButton.Size = new System.Drawing.Size(68, 24);
-            this.helpButton.Text = "&Pomoc";
+            this.helpButton.Text = "Pomoc";
             // 
             // aboutButton
             // 
@@ -180,6 +181,7 @@
             // 
             // toolStrip1
             // 
+            this.toolStrip1.BackColor = System.Drawing.Color.Silver;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -192,7 +194,8 @@
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(30, 248);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
+            this.toolStrip1.Size = new System.Drawing.Size(30, 178);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -202,7 +205,7 @@
             this.brushButton.Image = ((System.Drawing.Image)(resources.GetObject("brushButton.Image")));
             this.brushButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.brushButton.Name = "brushButton";
-            this.brushButton.Size = new System.Drawing.Size(28, 24);
+            this.brushButton.Size = new System.Drawing.Size(29, 24);
             this.brushButton.Text = "Pędzel";
             this.brushButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
@@ -212,7 +215,7 @@
             this.pencilButton.Image = ((System.Drawing.Image)(resources.GetObject("pencilButton.Image")));
             this.pencilButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pencilButton.Name = "pencilButton";
-            this.pencilButton.Size = new System.Drawing.Size(28, 24);
+            this.pencilButton.Size = new System.Drawing.Size(29, 24);
             this.pencilButton.Text = "Ołówek";
             this.pencilButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
@@ -222,7 +225,7 @@
             this.sprayButton.Image = ((System.Drawing.Image)(resources.GetObject("sprayButton.Image")));
             this.sprayButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.sprayButton.Name = "sprayButton";
-            this.sprayButton.Size = new System.Drawing.Size(28, 24);
+            this.sprayButton.Size = new System.Drawing.Size(29, 24);
             this.sprayButton.Text = "Spray";
             this.sprayButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
@@ -232,7 +235,7 @@
             this.rubberButton.Image = ((System.Drawing.Image)(resources.GetObject("rubberButton.Image")));
             this.rubberButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rubberButton.Name = "rubberButton";
-            this.rubberButton.Size = new System.Drawing.Size(28, 24);
+            this.rubberButton.Size = new System.Drawing.Size(29, 24);
             this.rubberButton.Text = "Gumka";
             this.rubberButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
@@ -242,7 +245,7 @@
             this.textBoxerButton.Image = ((System.Drawing.Image)(resources.GetObject("textBoxerButton.Image")));
             this.textBoxerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.textBoxerButton.Name = "textBoxerButton";
-            this.textBoxerButton.Size = new System.Drawing.Size(28, 24);
+            this.textBoxerButton.Size = new System.Drawing.Size(29, 24);
             this.textBoxerButton.Text = "Pole tekstowe";
             this.textBoxerButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
@@ -261,20 +264,18 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 24);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.canvasPictureBox);
-            this.splitContainer1.Panel1.Controls.Add(this.vScrollBar1);
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.label1);
             this.splitContainer1.Panel2.Controls.Add(this.layerList);
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip2);
-            this.splitContainer1.Size = new System.Drawing.Size(927, 567);
+            this.splitContainer1.Size = new System.Drawing.Size(927, 579);
             this.splitContainer1.SplitterDistance = 705;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -284,45 +285,37 @@
             this.canvasPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.canvasPictureBox.Location = new System.Drawing.Point(0, 0);
             this.canvasPictureBox.Name = "canvasPictureBox";
-            this.canvasPictureBox.Size = new System.Drawing.Size(686, 567);
+            this.canvasPictureBox.Size = new System.Drawing.Size(705, 579);
             this.canvasPictureBox.TabIndex = 3;
             this.canvasPictureBox.TabStop = false;
             this.canvasPictureBox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.canvasPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             this.canvasPictureBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
-            // vScrollBar1
-            // 
-            this.vScrollBar1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.vScrollBar1.Location = new System.Drawing.Point(686, 0);
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(19, 567);
-            this.vScrollBar1.TabIndex = 2;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(64, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Warstwy";
-            // 
             // layerList
             // 
+            this.layerList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.layerList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Nazwa});
+            this.Warstwy});
             this.layerList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layerList.GridLines = true;
             this.layerList.Location = new System.Drawing.Point(0, 0);
+            this.layerList.Margin = new System.Windows.Forms.Padding(10);
             this.layerList.Name = "layerList";
-            this.layerList.Size = new System.Drawing.Size(218, 540);
+            this.layerList.Size = new System.Drawing.Size(218, 552);
             this.layerList.TabIndex = 3;
             this.layerList.UseCompatibleStateImageBehavior = false;
+            this.layerList.View = System.Windows.Forms.View.Details;
             this.layerList.Click += new System.EventHandler(this.layerList_Click);
+            // 
+            // Warstwy
+            // 
+            this.Warstwy.Text = "Warstwy";
+            this.Warstwy.Width = 500;
             // 
             // toolStrip2
             // 
+            this.toolStrip2.BackColor = System.Drawing.Color.Silver;
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -330,7 +323,7 @@
             this.removeLayerBtn,
             this.duplicateLayerBtn,
             this.hideLayerBtn});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 540);
+            this.toolStrip2.Location = new System.Drawing.Point(0, 552);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(218, 27);
             this.toolStrip2.TabIndex = 1;
@@ -376,34 +369,25 @@
             this.hideLayerBtn.Text = "Ukryj warstwę";
             this.hideLayerBtn.Click += new System.EventHandler(this.selectLayerButton);
             // 
-            // penSizeLabel
-            // 
-            this.penSizeLabel.AutoSize = true;
-            this.penSizeLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.penSizeLabel.Location = new System.Drawing.Point(0, 0);
-            this.penSizeLabel.Name = "penSizeLabel";
-            this.penSizeLabel.Size = new System.Drawing.Size(36, 20);
-            this.penSizeLabel.TabIndex = 6;
-            this.penSizeLabel.Text = "Size";
-            this.penSizeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // penSizeBar
             // 
-            this.penSizeBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.penSizeBar.Location = new System.Drawing.Point(0, 25);
+            this.penSizeBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.penSizeBar.Location = new System.Drawing.Point(0, 0);
             this.penSizeBar.Maximum = 100;
             this.penSizeBar.Minimum = 1;
             this.penSizeBar.Name = "penSizeBar";
             this.penSizeBar.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.penSizeBar.Size = new System.Drawing.Size(30, 290);
+            this.penSizeBar.Size = new System.Drawing.Size(30, 397);
             this.penSizeBar.TabIndex = 5;
             this.penSizeBar.Value = 5;
             this.penSizeBar.Scroll += new System.EventHandler(this.penSizeBar_Scroll);
             // 
             // splitContainer2
             // 
+            this.splitContainer2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 24);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -413,21 +397,22 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.penSizeLabel);
             this.splitContainer2.Panel2.Controls.Add(this.penSizeBar);
-            this.splitContainer2.Size = new System.Drawing.Size(30, 567);
-            this.splitContainer2.SplitterDistance = 248;
+            this.splitContainer2.Size = new System.Drawing.Size(30, 579);
+            this.splitContainer2.SplitterDistance = 178;
             this.splitContainer2.TabIndex = 3;
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(927, 595);
+            this.ClientSize = new System.Drawing.Size(927, 603);
             this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Not Paint!";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -470,8 +455,6 @@
         private ToolStripButton pencilButton;
         private ToolStripButton textBoxerButton;
         private SplitContainer splitContainer1;
-        private VScrollBar vScrollBar1;
-        private Label label1;
         private ToolStrip toolStrip2;
         private ToolStripButton addLayerBtn;
         private ToolStripButton removeLayerBtn;
@@ -483,9 +466,8 @@
         private ToolStripButton rubberButton;
         private ToolStripButton penColorButton;
         private TrackBar penSizeBar;
-        private Label penSizeLabel;
         private SplitContainer splitContainer2;
         private ToolStripMenuItem backgroundColorButton;
-        private ColumnHeader Nazwa;
+        private ColumnHeader Warstwy;
     }
 }

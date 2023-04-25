@@ -14,7 +14,6 @@ namespace Projekt
         public int penSize = 5;
         public Color penColor = Color.Black;
         public Color rubberColor = Color.White;
-        Color canvasColor = Color.White;
         Bitmap brushImage = (Bitmap)Image.FromFile(Directory.GetCurrentDirectory() + "/../../../images/brush.png");
         public tools currentTool { get; set; }
         public ToolStripButton penColorButton { get; set; }
@@ -39,7 +38,7 @@ namespace Projekt
                     brush = new SolidBrush(color);
                     break;
                 case tools.spray:
-                    brush = new HatchBrush(HatchStyle.Cross, color, canvasColor);
+                    brush = new HatchBrush(HatchStyle.Cross, color, rubberColor);
                     break;
                 case tools.rubber:
                     brush = new SolidBrush(rubberColor);

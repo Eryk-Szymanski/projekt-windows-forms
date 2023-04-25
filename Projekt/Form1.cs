@@ -1,3 +1,5 @@
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+
 namespace Projekt
 {
     public partial class Form1 : Form
@@ -5,17 +7,26 @@ namespace Projekt
         FileManager fileManager { get; }
         CanvasManager canvasManager { get; }
 
+        bool saved = false;
+        bool exit = false;
+
         public Form1()
         {
             InitializeComponent();
 
+            this.Height = Screen.PrimaryScreen.Bounds.Height;
+            this.Width = Screen.PrimaryScreen.Bounds.Width;
+            WindowState = FormWindowState.Maximized;
+
             fileManager = new FileManager();
             canvasManager = new CanvasManager(canvasPictureBox, penColorButton, layerList);
             canvasManager.loadLayers();
+            canvasManager.highlightSelectedLayer();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
+            saved = false;
             if(canvasManager.toolBoxManager.currentTool != tools.textBoxer)
                 canvasManager.drawStart(e);
             else
@@ -45,7 +56,7 @@ namespace Projekt
 
         private void selectColor(object sender, EventArgs e)
         {
-            canvasManager.selectColor(sender, layerList);
+            canvasManager.selectColor(sender);
         }
 
         private void loadButton_Click(object sender, EventArgs e)
@@ -55,6 +66,7 @@ namespace Projekt
                 List<Layer> layers = fileManager.loadFromJson();
                 canvasManager.layers = layers;
                 canvasManager.loadLayers();
+                saved = true;
             }
             catch (Exception ex)
             {
@@ -65,6 +77,7 @@ namespace Projekt
         private void saveButton_Click(object sender, EventArgs e)
         {
             fileManager.saveToJson(canvasManager.layers, canvasManager.canvasPictureBox);
+            saved = true;
         }
 
         private void penSizeBar_Scroll(object sender, EventArgs e)
@@ -76,6 +89,7 @@ namespace Projekt
         {
             ToolStripButton clickedButton = (ToolStripButton)sender;
 
+            saved = false;
             switch (clickedButton.Name)
             {
                 case "addLayerBtn":
@@ -101,6 +115,29 @@ namespace Projekt
         private void aboutButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Ten projekt to wcale nie podróba Painta... (serio)\nAutorzy: Szymañski, Wróblewski, Uzarowicz\nNa potrzeby zaliczenia przedmiotu 'Programowanie Windows Forms'");
+        }
+
+        private void newFileButton_Click(object sender, EventArgs e)
+        {
+            Application.Restart();
+            this.Close();
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!saved)
+            {
+                DialogResult dialogResult = MessageBox.Show("Czy chcesz wyjœæ bez zapisywania?", "Niezapisane zmiany", MessageBoxButtons.YesNo);
+                if (dialogResult != DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

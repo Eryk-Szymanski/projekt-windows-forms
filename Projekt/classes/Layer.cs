@@ -11,6 +11,7 @@ namespace Projekt
         public List<SerializableTextBox> TextBoxes { get; set; }
         public List<SerializableLine> Lines { get; set; }
         public string Name { get; set; }
+        public bool IsVisible { get; set; }
         public Layer() { }
     }
 }

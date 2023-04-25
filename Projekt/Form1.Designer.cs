@@ -62,13 +62,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton13 = new System.Windows.Forms.ToolStripButton();
+            this.addLayerBtn = new System.Windows.Forms.ToolStripButton();
+            this.removeLayerBtn = new System.Windows.Forms.ToolStripButton();
+            this.duplicateLayerBtn = new System.Windows.Forms.ToolStripButton();
+            this.hideLayerBtn = new System.Windows.Forms.ToolStripButton();
             this.penSizeLabel = new System.Windows.Forms.Label();
             this.penSizeBar = new System.Windows.Forms.TrackBar();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -258,7 +259,8 @@
             this.sprayButton,
             this.rubberButton,
             this.textBoxerButton,
-            this.penColorButton});
+            this.penColorButton,
+            this.toolStripButton1});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -273,7 +275,7 @@
             this.brushButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.brushButton.Name = "brushButton";
             this.brushButton.Size = new System.Drawing.Size(27, 24);
-            this.brushButton.Text = "toolStripButton1";
+            this.brushButton.Text = "Pędzel";
             this.brushButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // pencilButton
@@ -283,7 +285,7 @@
             this.pencilButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.pencilButton.Name = "pencilButton";
             this.pencilButton.Size = new System.Drawing.Size(27, 24);
-            this.pencilButton.Text = "toolStripButton2";
+            this.pencilButton.Text = "Ołówek";
             this.pencilButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // sprayButton
@@ -293,7 +295,7 @@
             this.sprayButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.sprayButton.Name = "sprayButton";
             this.sprayButton.Size = new System.Drawing.Size(27, 24);
-            this.sprayButton.Text = "toolStripButton1";
+            this.sprayButton.Text = "Spray";
             this.sprayButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // rubberButton
@@ -303,7 +305,7 @@
             this.rubberButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rubberButton.Name = "rubberButton";
             this.rubberButton.Size = new System.Drawing.Size(27, 24);
-            this.rubberButton.Text = "toolStripButton2";
+            this.rubberButton.Text = "Gumka";
             this.rubberButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // textBoxerButton
@@ -313,7 +315,7 @@
             this.textBoxerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.textBoxerButton.Name = "textBoxerButton";
             this.textBoxerButton.Size = new System.Drawing.Size(27, 24);
-            this.textBoxerButton.Text = "toolStripButton3";
+            this.textBoxerButton.Text = "Pole tekstowe";
             this.textBoxerButton.Click += new System.EventHandler(this.toolBoxItem_Click);
             // 
             // penColorButton
@@ -325,6 +327,7 @@
             this.penColorButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.penColorButton.Name = "penColorButton";
             this.penColorButton.Size = new System.Drawing.Size(20, 20);
+            this.penColorButton.Text = "Wybór koloru";
             this.penColorButton.Click += new System.EventHandler(this.selectColor);
             // 
             // splitContainer1
@@ -383,7 +386,7 @@
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.Location = new System.Drawing.Point(0, 0);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(218, 517);
+            this.listView1.Size = new System.Drawing.Size(218, 525);
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
@@ -392,51 +395,51 @@
             this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton10,
-            this.toolStripButton11,
-            this.toolStripButton12,
-            this.toolStripButton13});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 517);
+            this.addLayerBtn,
+            this.removeLayerBtn,
+            this.duplicateLayerBtn,
+            this.hideLayerBtn});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 525);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(218, 38);
+            this.toolStrip2.Size = new System.Drawing.Size(218, 30);
             this.toolStrip2.TabIndex = 1;
             this.toolStrip2.Text = "toolStrip2";
             // 
-            // toolStripButton10
+            // addLayerBtn
             // 
-            this.toolStripButton10.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton10.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton10.Image")));
-            this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton10.Name = "toolStripButton10";
-            this.toolStripButton10.Size = new System.Drawing.Size(46, 32);
-            this.toolStripButton10.Text = "toolStripButton10";
+            this.addLayerBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.addLayerBtn.Image = ((System.Drawing.Image)(resources.GetObject("addLayerBtn.Image")));
+            this.addLayerBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.addLayerBtn.Name = "addLayerBtn";
+            this.addLayerBtn.Size = new System.Drawing.Size(46, 32);
+            this.addLayerBtn.Text = "Dodaj warstwę";
             // 
-            // toolStripButton11
+            // removeLayerBtn
             // 
-            this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
-            this.toolStripButton11.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton11.Name = "toolStripButton11";
-            this.toolStripButton11.Size = new System.Drawing.Size(46, 32);
-            this.toolStripButton11.Text = "toolStripButton11";
+            this.removeLayerBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.removeLayerBtn.Image = ((System.Drawing.Image)(resources.GetObject("removeLayerBtn.Image")));
+            this.removeLayerBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.removeLayerBtn.Name = "removeLayerBtn";
+            this.removeLayerBtn.Size = new System.Drawing.Size(46, 32);
+            this.removeLayerBtn.Text = "Usuń warstwę";
             // 
-            // toolStripButton12
+            // duplicateLayerBtn
             // 
-            this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton12.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton12.Image")));
-            this.toolStripButton12.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton12.Name = "toolStripButton12";
-            this.toolStripButton12.Size = new System.Drawing.Size(46, 32);
-            this.toolStripButton12.Text = "toolStripButton12";
+            this.duplicateLayerBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.duplicateLayerBtn.Image = ((System.Drawing.Image)(resources.GetObject("duplicateLayerBtn.Image")));
+            this.duplicateLayerBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.duplicateLayerBtn.Name = "duplicateLayerBtn";
+            this.duplicateLayerBtn.Size = new System.Drawing.Size(46, 24);
+            this.duplicateLayerBtn.Text = "Duplikuj warstwę";
             // 
-            // toolStripButton13
+            // hideLayerBtn
             // 
-            this.toolStripButton13.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton13.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton13.Image")));
-            this.toolStripButton13.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton13.Name = "toolStripButton13";
-            this.toolStripButton13.Size = new System.Drawing.Size(46, 24);
-            this.toolStripButton13.Text = "toolStripButton13";
+            this.hideLayerBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.hideLayerBtn.Image = ((System.Drawing.Image)(resources.GetObject("hideLayerBtn.Image")));
+            this.hideLayerBtn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.hideLayerBtn.Name = "hideLayerBtn";
+            this.hideLayerBtn.Size = new System.Drawing.Size(46, 24);
+            this.hideLayerBtn.Text = "Ukryj warstwę";
             // 
             // penSizeLabel
             // 
@@ -480,6 +483,15 @@
             this.splitContainer2.Size = new System.Drawing.Size(30, 555);
             this.splitContainer2.SplitterDistance = 243;
             this.splitContainer2.TabIndex = 3;
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(46, 24);
+            this.toolStripButton1.Text = "toolStripButton1";
             // 
             // Form1
             // 
@@ -544,10 +556,10 @@
         private VScrollBar vScrollBar1;
         private Label label1;
         private ToolStrip toolStrip2;
-        private ToolStripButton toolStripButton10;
-        private ToolStripButton toolStripButton11;
-        private ToolStripButton toolStripButton12;
-        private ToolStripButton toolStripButton13;
+        private ToolStripButton addLayerBtn;
+        private ToolStripButton removeLayerBtn;
+        private ToolStripButton duplicateLayerBtn;
+        private ToolStripButton hideLayerBtn;
         private PictureBox canvasPictureBox;
         private ListView listView1;
         private ToolStripButton sprayButton;
@@ -556,5 +568,6 @@
         private TrackBar penSizeBar;
         private Label penSizeLabel;
         private SplitContainer splitContainer2;
+        private ToolStripButton toolStripButton1;
     }
 }

@@ -141,14 +141,68 @@ namespace Projekt
             layers.Add(currentLayer);
         }
 
-        public void addLayer() { }
+        public void selectLayerButton(object sender, EventArgs e)
+        {
+            Button clickedButton = (Button)sender;
 
-        public void removeLayer() { }
+            switch (clickedButton.Name)
+            {
+                case "addLayerBtn":
+                    addLayer();
+                    break;
+                case "removeLayerBtn":
+                    removeLayer();
+                    break;
+                case "duplicateLayerBtn":
+                    duplicateLayer();
+                    break;
+            }
+        }
 
-        public void duplicateLayer() { }
+        public void addLayer() 
+        {
+            Layer newLayer = new Layer();
+            newLayer.Name = $"Nowa warstwa {layers.Count + 1}";
+            newLayer.TextBoxes = new List<SerializableTextBox>();
+            newLayer.Lines = new List<SerializableLine>();
+            layers.Add(newLayer);
+            currentLayer = newLayer;
+        }
 
-        public void selectLayer() { }
+        public void removeLayer() 
+        {
+            if (layers.Count > 1)
+            {
+                layers.Remove(currentLayer);
+                currentLayer = layers.Last();
+            }
+            else
+            {
+                MessageBox.Show("Brak warstw do usunięcia - nie można usunąć więcej warstw.");
+            }
+        }
 
-        public void hideLayer() { }
+        // TODO
+        public void duplicateLayer() 
+        {
+            /*
+            Layer newLayer = new Layer();
+            newLayer.Name = currentLayer.Name + " (kopia)";
+            newLayer.TextBoxes = // tu trzeba przypisac kopie Text boxow
+            newLayer.Lines = // tu trzeba przypisac kopie narysowanych Linii
+            layers.Add(newLayer);
+            currentLayer = newLayer;
+            */
+        }
+
+        public void selectLayer(Layer layer) 
+        {
+            currentLayer = layer;
+        }
+
+        public void hideLayer(Layer layer) 
+        {
+            layer.IsVisible = false;
+        }
     }
 }
